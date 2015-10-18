@@ -69,7 +69,9 @@ public class SendGetApplication extends AsyncTask<Integer, Void, String> {
 			Log.d(CoolHosts.TAG, ans[0]);
 			Log.d(CoolHosts.TAG, ans[1]);
 			if(isGetVersion==0)
-				caller.setWebview(ans[0]);
+				/**要显示的网页（站内）*/
+				Lib.SHOWADPAGE=ans[0];
+//				caller.setWebview(ans[0]);
 			else{
 				Lib.REMOTECHVERSION=ans[1];
 				if(!Lib.REMOTECHVERSION.equals(Lib.LOCALCHVERSION))

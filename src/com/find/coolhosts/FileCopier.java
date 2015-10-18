@@ -16,10 +16,11 @@ public class FileCopier extends AsyncTask<Object, Void, Boolean>
 {
 	private CoolHosts callback;
     private static final String TAG = FileCopier.class.getSimpleName();
-
+    private boolean isCopy;
 	public FileCopier (CoolHosts callback)
 	{
 		this.callback = callback;
+		isCopy=false;
 	}
 
 	@Override
@@ -38,6 +39,7 @@ public class FileCopier extends AsyncTask<Object, Void, Boolean>
 			DataOutputStream os = new DataOutputStream(process.getOutputStream());
 			os.writeBytes("mount -o rw,remount -t " + mountLocation[1] + " " + mountLocation[0] + " /system\n");
 			if(inputs[0]!=null){
+				isCopy=true;
 				bufferedReader = new BufferedReader(getReader(inputs[0]));
 				String line = null;
 				while((line = bufferedReader.readLine()) != null)
@@ -101,10 +103,15 @@ public class FileCopier extends AsyncTask<Object, Void, Boolean>
 	@Override
 	protected void onPostExecute (Boolean success)
 	{
-		if (success)
-			callback.appendOnConsole(callback.getConsole(),false,R.string.copysuccess);
-		else
-			callback.appendOnConsole(callback.getConsole(),false,R.string.copyfailed);
+		if (success){
+			//如果是复制，则设置按钮的动态
+			if(isCopy){
+				callback.setOneKeyState(360);
+				Lib.isSuccessed=true;
+			}
+			callback.appendOnConsole(callback.getConsole(),true,R.string.copysuccess);
+		}else
+			callback.appendOnConsole(callback.getConsole(),true,R.string.copyfailed);
 		callback.doNextTask();
 	}
 

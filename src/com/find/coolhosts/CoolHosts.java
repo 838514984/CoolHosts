@@ -13,16 +13,10 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.webkit.WebChromeClient;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,20 +24,22 @@ public class CoolHosts extends Activity {
   
 	private boolean root;
 	private TextView console;
-	private Button oneKey;
+	private Button ad,customHosts,customIP,clearHosts,help,more;
+	private LoadingButton oneKey;
+	
+	
 	public static final String TAG=CoolHosts.class.getSimpleName();
 	private boolean netState=false;
 	public static String CACHEDIR;
-	private WebView webView;
-	private WebDownloader downloadHostsTask;
 	private GetHostsVersion getHostsVersion;
-    private ProgressBar progressBar;
-
 	public CheckCoolHostsVersion getVersion;
+	private ButtonListener btnListener;
+	
+	
 	
 	private enum TASK
 	{
-		DOWNHOSTS,COPYNEWHOSTS,DELETEOLDHOSTS,GETURL,GETCLVERSION,GETHOSTSVERSION
+		DOWNHOSTS,COPYNEWHOSTS,DELETEOLDHOSTS,GETURL,GETCHVERSION,GETHOSTSVERSION
 	}
 	private Queue <TASK> taskQueue=null;
 	
@@ -54,88 +50,51 @@ public class CoolHosts extends Activity {
         setContentView(R.layout.main);  
         CACHEDIR=getFilesDir().toString();
         Log.v(TAG, CACHEDIR);
-        oneKey=(Button)findViewById(R.id.onekey);
-        console=(TextView)findViewById(R.id.console);
-        progressBar = (ProgressBar)findViewById(R.id.index_progressBar);
-        webView = (WebView) findViewById(R.id.webView1);  
-        
+        setButtons();
         taskQueue = new LinkedList<TASK>();
-        downloadHostsTask=new WebDownloader(CoolHosts.this);
         getHostsVersion=new GetHostsVersion(CoolHosts.this);
-        webView.getSettings().setJavaScriptEnabled(true);//设置使用够执行JS脚本  
-        webView.getSettings().setBuiltInZoomControls(false);//设置使支持缩放  
-        webView.loadUrl("http://www.findspace.name");  
-//        if(Build.VERSION.SDK_INT >= 19) {
-//	        webView.getSettings().setLoadsImagesAutomatically(true);
-//	    } else {
-//	        webView.getSettings().setLoadsImagesAutomatically(false);
-//	    }
-        webView.setWebViewClient(new WebViewClient(){  
-            @Override  
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {  
-            	 progressBar.setVisibility(View.VISIBLE);
-                view.loadUrl(url);// 使用当前WebView处理跳转  
-                return true;//true表示此事件在此处被处理，不需要再广播  
-            }  
-            @Override   //转向错误时的处理  
-            public void onReceivedError(WebView view, int errorCode,  
-                    String description, String failingUrl) {  
-                Toast.makeText(CoolHosts.this, "Oh no! " + description, Toast.LENGTH_SHORT).show();  
-            }  
-        });
-        
-
-        webView.setWebChromeClient(new WebChromeClient(){
-            @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-                Log.e("newProgress", newProgress+"");
-                progressBar.setProgress(newProgress);
-                if(newProgress >= 100){
-                    progressBar.setVisibility(View.GONE);
-                }
-//                super.onProgressChanged(view, newProgress);
-            }
-            
-        });
         try {
         	getVersion=new CheckCoolHostsVersion(CoolHosts.this);
 			getVersion.getLocalVersion();
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
-        
-        
-        
-        
-//        taskQueue.add(TASK.DOWNHOSTS);
         taskQueue.add(TASK.GETHOSTSVERSION);
         taskQueue.add(TASK.GETURL);
-        taskQueue.add(TASK.GETCLVERSION);
+        taskQueue.add(TASK.GETCHVERSION);
+        
+        
         doNextTask();
     }  
+	public void setButtons(){
+		btnListener=new ButtonListener();
+		ad=(Button)findViewById(R.id.ad);
+		ad.setOnClickListener(btnListener);
+		customHosts=(Button)findViewById(R.id.customehosts);
+		customHosts.setOnClickListener(btnListener);
+		customIP=(Button)findViewById(R.id.customip);
+		customIP.setOnClickListener(btnListener);
+		clearHosts=(Button)findViewById(R.id.clearHosts);
+		clearHosts.setOnClickListener(btnListener);
+		help=(Button)findViewById(R.id.help);
+		help.setOnClickListener(btnListener);
+		more=(Button)findViewById(R.id.more);
+		more.setOnClickListener(btnListener);
+		console=(TextView)findViewById(R.id.console);
+		oneKey=(LoadingButton)findViewById(R.id.onekey);
+		oneKey.setOnClickListener(btnListener);
+	}
     public void onResume (){
     	super.onResume();
     	root=RootChecker.hasRoot();
-    	if(!root)
-        	Toast.makeText(this, R.string.unrooted, Toast.LENGTH_SHORT).show();
-    	oneKey.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if(!root){
-					Toast.makeText(CoolHosts.this, R.string.unrooted, Toast.LENGTH_SHORT).show();
-				}else{
-					if(getNetState()){
-						taskQueue.add(TASK.DOWNHOSTS);
-						taskQueue.add(TASK.DELETEOLDHOSTS);
-						taskQueue.add(TASK.COPYNEWHOSTS);
-						doNextTask();
-					}else{
-						Toast.makeText(CoolHosts.this, R.string.neterror, Toast.LENGTH_SHORT).show();
-					}
-					
-				}
-			}
-		});
+    	oneKey.setCallback(new LoadingButton.Callback() {
+            @Override
+            public void complete() {
+            	String note=Lib.isSuccessed?getString(R.string.updatehostssuccessed):getString(R.string.updatehostsfailed);
+                Toast.makeText(getApplicationContext(),note,Toast.LENGTH_SHORT).show();
+            }
+        });
+//    	oneKey.setOnClickListener(btnListener);
     }
     /**Update the console textview*/
     public void appendOnConsole(TextView textview,boolean isAppend,final int ...id ){
@@ -150,77 +109,7 @@ public class CoolHosts extends Activity {
     		console.append(tempstr+"\n");
     }
     
-    /**显示网页*/
-    public void setWebview(String url){
-    	webView.loadUrl(url);
-    }
-    
 	public TextView getConsole(){return console;}
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		//(groupip,itemid)
-		menu.add(0, 1, 0,R.string.help ).setIcon(R.drawable.help);
-		menu.add(0, 2, 1, R.string.about).setIcon(R.drawable.about);
-		menu.add(0,3,2,R.string.updatechversion);
-		menu.add(0,4,3,R.string.emptyhosts);
-		menu.add(0,5,4,R.string.customhostsaddress);
-		menu.add(0,6,5,R.string.catHosts);
-		return super.onCreateOptionsMenu(menu);
-	}
-	//
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {//得到被点击的item的itemId
-		case 1:
-			setWebview("http://www.findspace.name/easycoding/503");
-			break;
-		case 2:
-			AlertDialog.Builder builderAbout = new AlertDialog.Builder(CoolHosts.this);
-			builderAbout.setMessage(R.string.dialog_about);
-			builderAbout.setTitle(R.string.about);
-			builderAbout.setCancelable(true);
-			builderAbout.setPositiveButton("OK", new DialogInterface.OnClickListener(){
-				@Override
-				public void onClick (DialogInterface dialog, int which){dialog.cancel();}});
-			AlertDialog alertAbout = builderAbout.create();
-			alertAbout.show();
-			break;
-		case 3:
-			taskQueue.add(TASK.GETCLVERSION);
-			doNextTask();
-			break;
-		case 4:
-			taskQueue.add(TASK.DELETEOLDHOSTS);
-			doNextTask();
-			break;
-		case 5:
-			final EditText et = new EditText(CoolHosts.this);
-			new AlertDialog.Builder(this).setTitle("请输入").setIcon(
-				     android.R.drawable.ic_dialog_info).setView(
-				    et).setPositiveButton("确定",new DialogInterface.OnClickListener() {
-				    	 public void onClick(DialogInterface dialog, int which) {
-				    		 Lib.SOURCE=et.getText().toString();
-				    		 Toast.makeText(CoolHosts.this, "Host源已经切换，仅此次有效，重启应用后恢复为默认的findspace的源", Toast.LENGTH_SHORT).show();
-				    	 }})
-				     .setNegativeButton("取消", null).show();
-			break;
-		case 6:
-			catHosts();
-			break;
-		default:
-			break;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-	@Override   
-    public boolean onKeyDown(int keyCode, KeyEvent event) {  
-        // TODO Auto-generated method stub  
-        if (keyCode == KeyEvent.KEYCODE_BACK||keyCode==KeyEvent.KEYCODE_HOME) {  
-            finish();
-            return true;  
-        }  
-        return super.onKeyDown(keyCode, event);  
-    }
 	public boolean getNetState() {
 		return netState;
 	}
@@ -242,18 +131,21 @@ public class CoolHosts extends Activity {
 		if(taskQueue!=null && taskQueue.peek()!=null){
 			switch(taskQueue.remove()){
 			case COPYNEWHOSTS:
+				appendOnConsole(getConsole(),true,R.string.copyingnewhosts);
 				new FileCopier(CoolHosts.this).execute(CACHEDIR + "/hosts", "/system/etc/hosts");
 				break;
 			case DELETEOLDHOSTS:
+				appendOnConsole(getConsole(),true,R.string.deleteoldhosts);
 				new FileCopier(CoolHosts.this).execute(null, "/system/etc/hosts");
 				break;
 			case DOWNHOSTS:
-				downloadHostsTask.execute(Lib.SOURCE,Lib.HOSTSINCACHE);
+				appendOnConsole(getConsole(),true,R.string.downloadhosts);
+				new WebDownloader(CoolHosts.this).execute(Lib.SOURCE,Lib.HOSTSINCACHE);
 				break;
 			case GETURL:
 		        new SendGetApplication(CoolHosts.this).execute(0);
 				break;
-			case GETCLVERSION:
+			case GETCHVERSION:
 				new SendGetApplication(CoolHosts.this).execute(1);
 				break;
 			case GETHOSTSVERSION:
@@ -270,8 +162,65 @@ public class CoolHosts extends Activity {
 		Intent catIntent=new Intent(CoolHosts.this,CatHosts.class);
 		CoolHosts.this.startActivity(catIntent);
 	}
-	/**获取Hosts版本*/
-	
+	public void setOneKeyState(int num){
+		oneKey.setTargetProgress(num);
+	}
+	@SuppressLint("NewApi")
+	private final class ButtonListener implements View.OnClickListener{
+		public void onClick(View v) {
+			switch(v.getId()){
+			case R.id.onekey:
+				if(!root){
+					Toast.makeText(CoolHosts.this, R.string.unrooted, Toast.LENGTH_SHORT).show();
+				}else{
+					if(getNetState()){
+						oneKey.setOnClickDefault();
+						oneKey.callOnClick();
+						taskQueue.add(TASK.DOWNHOSTS);
+						taskQueue.add(TASK.DELETEOLDHOSTS);
+						taskQueue.add(TASK.COPYNEWHOSTS);
+						doNextTask();
+					}else{
+						Toast.makeText(CoolHosts.this, R.string.neterror, Toast.LENGTH_SHORT).show();
+					}
+				}
+				break;
+			case R.id.ad:
+				Intent intent=new Intent(CoolHosts.this,AdPage.class);
+                intent.putExtra("url","http://www.findspace.name");
+                CoolHosts.this.startActivity(intent);
+				break;
+			case R.id.customehosts:
+				final EditText et = new EditText(CoolHosts.this);
+				new AlertDialog.Builder(CoolHosts.this).setTitle("请输入").setIcon(
+					     android.R.drawable.ic_dialog_info).setView(
+					    et).setPositiveButton("确定",new DialogInterface.OnClickListener() {
+					    	 public void onClick(DialogInterface dialog, int which) {
+					    		 Lib.SOURCE=et.getText().toString();
+					    		 CoolHosts.this.appendOnConsole(getConsole(), true, R.string.customhostsaddressnote);
+//					    		 Toast.makeText(CoolHosts.this, "Host源已经切换，仅此次有效，重启应用后恢复为默认的findspace的源", Toast.LENGTH_SHORT).show();
+					    	 }})
+					     .setNegativeButton("取消", null).show();
+				break;
+			case R.id.customip:
+				Toast.makeText(CoolHosts.this, "wait for next time~", Toast.LENGTH_SHORT).show();
+				break;
+			case R.id.clearHosts:
+				taskQueue.add(TASK.DELETEOLDHOSTS);
+				doNextTask();
+				break;
+			case R.id.help:
+				Intent intent2=new Intent(CoolHosts.this,AdPage.class);
+                intent2.putExtra("url","http://www.findspace.name/easycoding/503");
+                CoolHosts.this.startActivity(intent2);
+				break;
+			case R.id.more:
+				Toast.makeText(CoolHosts.this, "wait for next time~", Toast.LENGTH_SHORT).show();
+				break;
+			}
+		}
+		
+	}
 }
 
 

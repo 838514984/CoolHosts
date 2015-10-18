@@ -25,9 +25,9 @@ public final class Lib {
 	static final String EMPTH_STRING="";
 	//存在本地文件名
 	static final String HOSTSINCACHE="hosts";
-	
-	
-	
+	static String SHOWADPAGE;
+	/**是否成功*/
+	static boolean isSuccessed=false;
 	
     /**Get The local version mark
      * getExternalCacheDir

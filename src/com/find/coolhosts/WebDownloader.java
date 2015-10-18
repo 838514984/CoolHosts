@@ -49,6 +49,8 @@ public class WebDownloader extends AsyncTask<String, Void, File>{
     public void onPostExecute(File f) {
         if (f != null) {
 			Log.d(CoolHosts.TAG, "download success");
+			caller.appendOnConsole(caller.getConsole(), true, R.string.downsuccuess);
+			caller.setOneKeyState(180);
 			caller.doNextTask();
         }
     }

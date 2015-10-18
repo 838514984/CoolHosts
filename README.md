@@ -5,7 +5,7 @@
 提供了对：
 Google Services的支持。
 ----
-#[官方主页][0]
+#[官方主页帮助][0]
 ##Connect Me：
 + SinaWeibo： @FindSpace博客
 + Blog:http://wwww.findspace.name

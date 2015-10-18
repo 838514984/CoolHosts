@@ -1,47 +1,120 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
- <ProgressBar
-        android:id="@+id/index_progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:progress="0"
-        android:secondaryProgress="0"
-        android:visibility="visible" />
-    <WebView
-        android:id="@+id/webView1"
-        android:layout_width="match_parent"
-        android:layout_height="360dip" />
 
-    <ScrollView
-        android:id="@+id/scrollView"
+    <LinearLayout
+        android:id="@+id/top"
         android:layout_width="match_parent"
-        android:layout_height="60dip"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="5dp" >
-
-        <TextView
-            android:id="@+id/console"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="vertical" >
+            <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/tempstring"
-            android:textColor="#008000"
-            android:textSize="16sp" />
-    </ScrollView>
+            android:layout_height="0dp"
+            android:layout_weight="2"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                 android:layout_marginBottom="10dp"
+                android:layout_marginTop="30dp" >
+ 
+                <TextView
+                    android:id="@+id/console"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tempstring"
+                    android:textColor="#008000"
+                    android:textSize="16sp" />
+            </ScrollView>
 
-    <Button
+		<com.find.coolhosts.LoadingButton
         android:id="@+id/onekey"
-        android:layout_width="wrap_content"
-        android:layout_height="70dip"
-        android:layout_gravity="center"
-        android:background="@drawable/btn_background"
-        android:gravity="center"
-        android:text="" />
+        android:layout_gravity="center_horizontal"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="30dp"
+        />
+            
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/bottomTopinner"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/ad"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/plus"
+                android:text="@string/ad" />
+
+            <Button
+                android:id="@+id/customehosts"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/customhostsource"
+                android:text="@string/customhostsaddress" />
+
+            <Button
+                android:id="@+id/customip"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/customip"
+                android:text="@string/customIP" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bottomBottominner"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/clearHosts"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/deletehosts"
+                android:text="@string/emptyhosts" />
+
+            <Button
+                android:id="@+id/help"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/help"
+                android:text="@string/help" />
+
+            <Button
+                android:id="@+id/more"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/more"
+                android:text="@string/more" />
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>
