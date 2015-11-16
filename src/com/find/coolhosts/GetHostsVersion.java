@@ -8,13 +8,13 @@ import java.net.URL;
 
 import android.os.AsyncTask;
 
-public class GetHostsVersion extends AsyncTask<String, Void, String>{
+public class GetHostsVersion extends AsyncTask<Integer, Void, String>{
 	CoolHosts caller;
 	public GetHostsVersion(CoolHosts caller) {
 		this.caller=caller;
 	}
 	@Override
-	protected String doInBackground(String... params) {
+	protected String doInBackground(Integer... params) {
 		try {
 			URL url=new URL(Lib.HOSTS_VERSION_URL);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(),"UTF-8"));

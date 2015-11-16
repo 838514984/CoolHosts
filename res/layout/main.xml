@@ -26,7 +26,10 @@
                     android:layout_height="wrap_content"
                     android:text="@string/tempstring"
                     android:textColor="#008000"
-                    android:textSize="16sp" />
+                    android:textSize="16sp" 
+                    android:singleLine="false"
+    				android:scrollbars="vertical"
+    				android:fadeScrollbars="false"/>
             </ScrollView>
 
 		<com.find.coolhosts.LoadingButton
@@ -72,13 +75,13 @@
                 android:text="@string/customhostsaddress" />
 
             <Button
-                android:id="@+id/customip"
+                android:id="@+id/readfromfile"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:drawableTop="@drawable/customip"
-                android:text="@string/customIP" />
+                android:drawableTop="@drawable/readfromfile"
+                android:text="@string/readfromfile" />
         </LinearLayout>
 
         <LinearLayout

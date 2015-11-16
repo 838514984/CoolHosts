@@ -10,13 +10,15 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,12 +28,11 @@ public class CoolHosts extends Activity {
 	private TextView console;
 	private Button ad,customHosts,customIP,clearHosts,help,more;
 	private LoadingButton oneKey;
+	private ScrollView scrollView;
 	
-	
-	public static final String TAG=CoolHosts.class.getSimpleName();
+	public static final String TAG="coolhosts";
 	private boolean netState=false;
 	public static String CACHEDIR;
-	private GetHostsVersion getHostsVersion;
 	public CheckCoolHostsVersion getVersion;
 	private ButtonListener btnListener;
 	
@@ -39,7 +40,7 @@ public class CoolHosts extends Activity {
 	
 	private enum TASK
 	{
-		DOWNHOSTS,COPYNEWHOSTS,DELETEOLDHOSTS,GETURL,GETCHVERSION,GETHOSTSVERSION
+		DOWNHOSTS,COPYNEWHOSTSFROMWEB,COPYNEWHOSTSFROMLOCAL,DELETEOLDHOSTS,GETURL,GETCHVERSION,GETHOSTSVERSION,AFTERWORK
 	}
 	private Queue <TASK> taskQueue=null;
 	
@@ -52,7 +53,7 @@ public class CoolHosts extends Activity {
         Log.v(TAG, CACHEDIR);
         setButtons();
         taskQueue = new LinkedList<TASK>();
-        getHostsVersion=new GetHostsVersion(CoolHosts.this);
+        
         try {
         	getVersion=new CheckCoolHostsVersion(CoolHosts.this);
 			getVersion.getLocalVersion();
@@ -62,7 +63,7 @@ public class CoolHosts extends Activity {
         taskQueue.add(TASK.GETHOSTSVERSION);
         taskQueue.add(TASK.GETURL);
         taskQueue.add(TASK.GETCHVERSION);
-        
+         
         
         doNextTask();
     }  
@@ -72,7 +73,7 @@ public class CoolHosts extends Activity {
 		ad.setOnClickListener(btnListener);
 		customHosts=(Button)findViewById(R.id.customehosts);
 		customHosts.setOnClickListener(btnListener);
-		customIP=(Button)findViewById(R.id.customip);
+		customIP=(Button)findViewById(R.id.readfromfile);
 		customIP.setOnClickListener(btnListener);
 		clearHosts=(Button)findViewById(R.id.clearHosts);
 		clearHosts.setOnClickListener(btnListener);
@@ -81,8 +82,17 @@ public class CoolHosts extends Activity {
 		more=(Button)findViewById(R.id.more);
 		more.setOnClickListener(btnListener);
 		console=(TextView)findViewById(R.id.console);
+		console.setMovementMethod(new ScrollingMovementMethod());
 		oneKey=(LoadingButton)findViewById(R.id.onekey);
 		oneKey.setOnClickListener(btnListener);
+		scrollView=(ScrollView)findViewById(R.id.scrollView);
+		scrollView.post(new Runnable() {
+			   @Override
+			   public void run() {
+			    // TODO Auto-generated method stub
+			    scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+			   }
+			  });
 	}
     public void onResume (){
     	super.onResume();
@@ -96,7 +106,11 @@ public class CoolHosts extends Activity {
         });
 //    	oneKey.setOnClickListener(btnListener);
     }
-    /**Update the console textview*/
+    /**Update the console textview
+     * 更新console
+     * @param textview: 更新哪个textview
+     * @param isAppend: 追加还是覆盖
+     * @param ids: R.string.值*/
     public void appendOnConsole(TextView textview,boolean isAppend,final int ...id ){
     	if(!isAppend)console.setText("");
     	for(int i:id){
@@ -108,11 +122,13 @@ public class CoolHosts extends Activity {
     	for(String tempstr:strs)
     		console.append(tempstr+"\n");
     }
+  
     
 	public TextView getConsole(){return console;}
 	public boolean getNetState() {
 		return netState;
 	}
+	/**设置网络状态*/
 	public void setNetState(boolean netState) {
 		this.netState = netState;
 	}  
@@ -130,13 +146,13 @@ public class CoolHosts extends Activity {
 	public void doNextTask(){
 		if(taskQueue!=null && taskQueue.peek()!=null){
 			switch(taskQueue.remove()){
-			case COPYNEWHOSTS:
+			case COPYNEWHOSTSFROMWEB:
 				appendOnConsole(getConsole(),true,R.string.copyingnewhosts);
-				new FileCopier(CoolHosts.this).execute(CACHEDIR + "/hosts", "/system/etc/hosts");
+				new FileCopier(CoolHosts.this).execute(CACHEDIR + "/hosts", Lib.HOSTSPATH);
 				break;
 			case DELETEOLDHOSTS:
 				appendOnConsole(getConsole(),true,R.string.deleteoldhosts);
-				new FileCopier(CoolHosts.this).execute(null, "/system/etc/hosts");
+				new FileCopier(CoolHosts.this).execute(null,  Lib.HOSTSPATH);
 				break;
 			case DOWNHOSTS:
 				appendOnConsole(getConsole(),true,R.string.downloadhosts);
@@ -149,7 +165,15 @@ public class CoolHosts extends Activity {
 				new SendGetApplication(CoolHosts.this).execute(1);
 				break;
 			case GETHOSTSVERSION:
-				getHostsVersion.execute(Lib.HOSTS_VERSION_URL);
+				new GetHostsVersion(CoolHosts.this).execute();
+				break;
+			case COPYNEWHOSTSFROMLOCAL:
+				appendOnConsole(getConsole(),true,R.string.copyingnewhosts);
+				new FileCopier(CoolHosts.this).execute(Lib.LOCALCUSTOMHOSTSPATH, Lib.HOSTSPATH);
+				break;
+			case AFTERWORK:
+				appendOnConsole(console,true,getString(R.string.local_version)+Lib.getlocalversion());
+				appendOnConsole(console,true,getString(R.string.remote_version)+Lib.getRemoteVersion());
 				break;
 			default:
 				break;
@@ -173,15 +197,26 @@ public class CoolHosts extends Activity {
 				if(!root){
 					Toast.makeText(CoolHosts.this, R.string.unrooted, Toast.LENGTH_SHORT).show();
 				}else{
-					if(getNetState()){
-						oneKey.setOnClickDefault();
-						oneKey.callOnClick();
-						taskQueue.add(TASK.DOWNHOSTS);
+					//从本地文件更新
+					if(Lib.UPDATEMODE==1 && !Lib.LOCALCUSTOMHOSTSPATH.equals("")){
+						appendOnConsole(console, false, getString(R.string.readfromfilenote)+Lib.LOCALCUSTOMHOSTSPATH);
 						taskQueue.add(TASK.DELETEOLDHOSTS);
-						taskQueue.add(TASK.COPYNEWHOSTS);
+						taskQueue.add(TASK.COPYNEWHOSTSFROMLOCAL);
+						taskQueue.add(TASK.AFTERWORK);
 						doNextTask();
 					}else{
-						Toast.makeText(CoolHosts.this, R.string.neterror, Toast.LENGTH_SHORT).show();
+						/**判断网络状态*/
+						if(getNetState()){
+							oneKey.setOnClickDefault();
+							oneKey.callOnClick();
+							taskQueue.add(TASK.DOWNHOSTS);
+							taskQueue.add(TASK.DELETEOLDHOSTS);
+							taskQueue.add(TASK.COPYNEWHOSTSFROMWEB);
+							taskQueue.add(TASK.AFTERWORK);
+							doNextTask();
+						}else{
+							Toast.makeText(CoolHosts.this, R.string.neterror, Toast.LENGTH_SHORT).show();
+						}
 					}
 				}
 				break;
@@ -192,7 +227,7 @@ public class CoolHosts extends Activity {
 				break;
 			case R.id.customehosts:
 				final EditText et = new EditText(CoolHosts.this);
-				new AlertDialog.Builder(CoolHosts.this).setTitle("请输入").setIcon(
+				new AlertDialog.Builder(CoolHosts.this).setTitle("请输入源地址").setIcon(
 					     android.R.drawable.ic_dialog_info).setView(
 					    et).setPositiveButton("确定",new DialogInterface.OnClickListener() {
 					    	 public void onClick(DialogInterface dialog, int which) {
@@ -202,8 +237,15 @@ public class CoolHosts extends Activity {
 					    	 }})
 					     .setNegativeButton("取消", null).show();
 				break;
-			case R.id.customip:
-				Toast.makeText(CoolHosts.this, "wait for next time~", Toast.LENGTH_SHORT).show();
+			case R.id.readfromfile:
+				Intent intent3 = new Intent(Intent.ACTION_GET_CONTENT);
+				intent3.setType("*/*");
+				intent3.addCategory(Intent.CATEGORY_OPENABLE);
+				try {
+					startActivityForResult(Intent.createChooser(intent3, "Choose File"), Lib.FILE_SELECT_CODE);
+				} catch (android.content.ActivityNotFoundException ex) {
+					Toast.makeText(CoolHosts.this, "No File Manager Founded", Toast.LENGTH_SHORT).show();
+				}
 				break;
 			case R.id.clearHosts:
 				taskQueue.add(TASK.DELETEOLDHOSTS);
@@ -221,6 +263,18 @@ public class CoolHosts extends Activity {
 		}
 		
 	}
+	 public void onActivityResult(int requestCode, int resultCode, Intent data) {  
+	        // TODO Auto-generated method stub  
+	        if(resultCode == Activity.RESULT_OK&&requestCode == Lib.FILE_SELECT_CODE){
+	        	if(data.getData()!=null){
+	        		Uri uri=data.getData();
+	        		Lib.LOCALCUSTOMHOSTSPATH=uri.getPath();
+	        		Toast.makeText(this, "现在你可以点击一键更新从本地更新了～", Toast.LENGTH_SHORT).show();
+	        		Lib.UPDATEMODE=1;
+	        	}
+	        }
+	        super.onActivityResult(requestCode, resultCode, data);  
+	    }  
 }
 
 

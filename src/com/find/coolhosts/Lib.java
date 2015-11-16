@@ -26,9 +26,15 @@ public final class Lib {
 	//存在本地文件名
 	static final String HOSTSINCACHE="hosts";
 	static String SHOWADPAGE;
+	/**自定义本地文件源的路径*/
+	static String LOCALCUSTOMHOSTSPATH="";
 	/**是否成功*/
 	static boolean isSuccessed=false;
-	
+	/**读取本地hosts文件时需要的返回码*/
+	static final int FILE_SELECT_CODE=2;
+	/**更新模式
+	 * @value 0:默认hosts源;1:本地文件源*/
+	static int UPDATEMODE=0;
     /**Get The local version mark
      * getExternalCacheDir
      * */

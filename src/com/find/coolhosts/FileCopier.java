@@ -46,7 +46,7 @@ public class FileCopier extends AsyncTask<Object, Void, Boolean>
 					os.writeBytes("echo '" + line + "' >> " + inputs[1] + "\n");
 			}else{
 				//empty hosts
-				os.writeBytes("echo '' > " + inputs[1] + "\n");
+				os.writeBytes("echo '127.0.0.1 localhost' > " + inputs[1] + "\n");
 			}
 			os.writeBytes("chmod 666 /system/etc/hosts\n");
 			os.writeBytes("exit\n");
