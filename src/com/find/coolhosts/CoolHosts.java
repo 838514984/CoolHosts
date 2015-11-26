@@ -60,9 +60,9 @@ public class CoolHosts extends Activity {
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
-        taskQueue.add(TASK.GETHOSTSVERSION);
-        taskQueue.add(TASK.GETURL);
-        taskQueue.add(TASK.GETCHVERSION);
+//        taskQueue.add(TASK.GETHOSTSVERSION);
+//        taskQueue.add(TASK.GETURL);
+//        taskQueue.add(TASK.GETCHVERSION);
          
         
         doNextTask();
