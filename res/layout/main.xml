@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -10,36 +11,55 @@
         android:layout_height="0dp"
         android:layout_weight="2"
         android:orientation="vertical" >
-            <ScrollView
+		<com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id">
+    	</com.google.android.gms.ads.AdView>
+        <TextView
+            android:id="@+id/versionConsole"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fadeScrollbars="false"
+            android:scrollbars="vertical"
+            android:singleLine="false"
+            android:text=""
+            android:textColor="#008000"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textSize="16sp" />
+
+        <ScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                 android:layout_marginBottom="10dp"
-                android:layout_marginTop="30dp" >
- 
-                <TextView
-                    android:id="@+id/console"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/tempstring"
-                    android:textColor="#008000"
-                    android:textSize="16sp" 
-                    android:singleLine="false"
-    				android:scrollbars="vertical"
-    				android:fadeScrollbars="false"/>
-            </ScrollView>
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="2" >
 
-		<com.find.coolhosts.LoadingButton
-        android:id="@+id/onekey"
-        android:layout_gravity="center_horizontal"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginBottom="30dp"
-        />
-            
+            <TextView
+                android:id="@+id/console"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fadeScrollbars="false"
+                android:scrollbars="vertical"
+                android:singleLine="false"
+                android:text="@string/tempstring"
+                android:textColor="#008000"
+                android:textSize="16sp" />
+        </ScrollView>
+
+        <com.find.coolhosts.LoadingButton
+            android:id="@+id/onekey"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="30dp" />
     </LinearLayout>
 
     <LinearLayout

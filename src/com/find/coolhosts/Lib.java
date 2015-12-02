@@ -23,6 +23,12 @@ public final class Lib {
 	static String LOCALCHVERSION="";
 	static String REMOTECHVERSION="";
 	static final String EMPTH_STRING="";
+	static final String MY_AD_UNIT_ID="ca-app-pub-8527554614606787/5603479557";
+	/**获取的字符串buffer，包括要展示的页面链接，版本号，新版本下载地址*/
+	static String echoBuffer="";
+	static String COOLHOSTS_UPDATE_LINK="";
+	//testid
+//	static final String MY_AD_UNIT_ID="ca-app-pub-3940256099942544/1033173712";
 	//存在本地文件名
 	static final String HOSTSINCACHE="hosts";
 	static String SHOWADPAGE;

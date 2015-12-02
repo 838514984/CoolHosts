@@ -17,7 +17,7 @@
 	<string name="copysuccess">操作成功！</string>
 	<string name="copyfailed">Hosts更新失败@_@</string>
 	<string name="neterror">请检查您的网络状态，或者发邮件给我反馈</string>
-	<string name="updatechnote">请到博客去下载更新！</string>
+	<string name="updatechnote">请点击下面的更新下载新版本！</string>
 	<string name="emptyhosts">初始化hosts</string>
 	<string name="customhostsaddress">自定义hosts</string>
 	<string name="customIP">自定义IP</string>
@@ -34,4 +34,5 @@
 	<string name="adnote">麻烦点击博客Logo下面的广告支持一下吧～\n更新需要动力～～\n新浪微博上关注@FindSpace博客\n个人博客： www.findspace.name\n邮件： find@findspace.name</string>
 	<string name="readfromfile">从文件读</string>
 	<string name="readfromfilenote">正在从本地读取hosts，本地hosts文件源地址是：</string>
+	<string name="banner_ad_unit_id">ca-app-pub-8527554614606787/5603479557</string>
 </resources>

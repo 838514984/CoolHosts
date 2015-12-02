@@ -31,8 +31,9 @@ public class GetHostsVersion extends AsyncTask<Integer, Void, String>{
 	@Override
 	protected void onPostExecute(String result) {
 		Lib.REMOTE_VERSION=result;
-		caller.appendOnConsole(caller.getConsole(),false,caller.getString(R.string.local_version)+Lib.getlocalversion());
-		caller.appendOnConsole(caller.getConsole(),true,caller.getString(R.string.remote_version)+Lib.getRemoteVersion());
+		caller.appendOnConsole(caller.getVersionConsole(),false,caller.getString(R.string.local_version)+Lib.getlocalversion());
+		caller.appendOnConsole(caller.getVersionConsole(),true,caller.getString(R.string.remote_version)+Lib.getRemoteVersion());
+		caller.appendOnConsole(caller.getConsole(), false, "");
 		caller.setNetState(true);
 		caller.doNextTask();
 	}

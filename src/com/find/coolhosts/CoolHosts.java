@@ -2,17 +2,21 @@ package com.find.coolhosts;
 
 
 import java.util.LinkedList;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import java.util.Queue;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
@@ -21,11 +25,10 @@ import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 public class CoolHosts extends Activity {  
   
 	private boolean root;
-	private TextView console;
+	private TextView console,versionConsole;
 	private Button ad,customHosts,customIP,clearHosts,help,more;
 	private LoadingButton oneKey;
 	private ScrollView scrollView;
@@ -37,10 +40,9 @@ public class CoolHosts extends Activity {
 	private ButtonListener btnListener;
 	
 	
-	
 	private enum TASK
 	{
-		DOWNHOSTS,COPYNEWHOSTSFROMWEB,COPYNEWHOSTSFROMLOCAL,DELETEOLDHOSTS,GETURL,GETCHVERSION,GETHOSTSVERSION,AFTERWORK
+		DOWNHOSTS,COPYNEWHOSTSFROMWEB,COPYNEWHOSTSFROMLOCAL,DELETEOLDHOSTS,GETCHVERSION,GETHOSTSVERSION,AFTERWORK
 	}
 	private Queue <TASK> taskQueue=null;
 	
@@ -61,10 +63,11 @@ public class CoolHosts extends Activity {
 			e.printStackTrace();
 		}
 //        taskQueue.add(TASK.GETHOSTSVERSION);
-//        taskQueue.add(TASK.GETURL);
-//        taskQueue.add(TASK.GETCHVERSION);
-         
+        taskQueue.add(TASK.GETCHVERSION);
         
+//        AdView mAdView = (AdView) findViewById(R.id.adView);
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        mAdView.loadAd(adRequest);
         doNextTask();
     }  
 	public void setButtons(){
@@ -83,6 +86,7 @@ public class CoolHosts extends Activity {
 		more.setOnClickListener(btnListener);
 		console=(TextView)findViewById(R.id.console);
 		console.setMovementMethod(new ScrollingMovementMethod());
+		versionConsole=(TextView)findViewById(R.id.versionConsole);
 		oneKey=(LoadingButton)findViewById(R.id.onekey);
 		oneKey.setOnClickListener(btnListener);
 		scrollView=(ScrollView)findViewById(R.id.scrollView);
@@ -112,19 +116,20 @@ public class CoolHosts extends Activity {
      * @param isAppend: 追加还是覆盖
      * @param ids: R.string.值*/
     public void appendOnConsole(TextView textview,boolean isAppend,final int ...id ){
-    	if(!isAppend)console.setText("");
+    	if(!isAppend)textview.setText("");
     	for(int i:id){
-    		console.append(getString(i)+"\n");
+    		textview.append(getString(i)+"\n");
     	}
     }
     public void appendOnConsole(TextView textview,boolean isAppend,final String ...strs){
-    	if(!isAppend)console.setText("");
+    	if(!isAppend)textview.setText("");
     	for(String tempstr:strs)
-    		console.append(tempstr+"\n");
+    		textview.append(tempstr+"\n");
     }
   
     
 	public TextView getConsole(){return console;}
+	public TextView getVersionConsole(){return versionConsole;}
 	public boolean getNetState() {
 		return netState;
 	}
@@ -132,14 +137,27 @@ public class CoolHosts extends Activity {
 	public void setNetState(boolean netState) {
 		this.netState = netState;
 	}  
+	/**CoolHosts版本更新*/
 	public void showVersion(){
 		AlertDialog.Builder builderAbout = new AlertDialog.Builder(CoolHosts.this);
 		builderAbout.setMessage(getString(R.string.local_version)+Lib.LOCALCHVERSION+"\n"+getString(R.string.remote_version)+Lib.REMOTECHVERSION+"\n"+getString(R.string.updatechnote));
 		builderAbout.setTitle(R.string.updatechversion);
 		builderAbout.setCancelable(true);
-		builderAbout.setPositiveButton("OK", new DialogInterface.OnClickListener(){
+		builderAbout.setPositiveButton("更新", new DialogInterface.OnClickListener(){
 			@Override
-			public void onClick (DialogInterface dialog, int which){dialog.cancel();}});
+			public void onClick (DialogInterface dialog, int which){
+				Uri uri =Uri.parse(Lib.COOLHOSTS_UPDATE_LINK);
+				DownloadManager dm= (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+				DownloadManager.Request req= new DownloadManager.Request(uri);
+				req.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+				req.setDestinationInExternalFilesDir(CoolHosts.this, Environment.DIRECTORY_DOWNLOADS, "");
+				req.setTitle("CoolHosts.apk");
+		    	req.setDescription("下载完后请点击打开");
+		    	req.setMimeType("application/vnd.android.package-archive");
+		    	long downloadId = dm.enqueue(req);
+				dialog.cancel();
+				
+			}});
 		AlertDialog alertAbout = builderAbout.create();
 		alertAbout.show();
 	}
@@ -155,14 +173,11 @@ public class CoolHosts extends Activity {
 				new FileCopier(CoolHosts.this).execute(null,  Lib.HOSTSPATH);
 				break;
 			case DOWNHOSTS:
-				appendOnConsole(getConsole(),true,R.string.downloadhosts);
+				appendOnConsole(getConsole(),false,R.string.downloadhosts);
 				new WebDownloader(CoolHosts.this).execute(Lib.SOURCE,Lib.HOSTSINCACHE);
 				break;
-			case GETURL:
-		        new SendGetApplication(CoolHosts.this).execute(0);
-				break;
 			case GETCHVERSION:
-				new SendGetApplication(CoolHosts.this).execute(1);
+				new SendGetApplication(CoolHosts.this).execute();
 				break;
 			case GETHOSTSVERSION:
 				new GetHostsVersion(CoolHosts.this).execute();
@@ -172,12 +187,27 @@ public class CoolHosts extends Activity {
 				new FileCopier(CoolHosts.this).execute(Lib.LOCALCUSTOMHOSTSPATH, Lib.HOSTSPATH);
 				break;
 			case AFTERWORK:
-				appendOnConsole(console,true,getString(R.string.local_version)+Lib.getlocalversion());
-				appendOnConsole(console,true,getString(R.string.remote_version)+Lib.getRemoteVersion());
+				appendOnConsole(versionConsole,false,getString(R.string.local_version)+Lib.getlocalversion());
+				appendOnConsole(versionConsole,true,getString(R.string.remote_version)+Lib.getRemoteVersion());
 				break;
 			default:
 				break;
 			
+			}
+		}
+	}
+	/**oncreate时从服务器获取coolhosts version和更新链接等信息，在此处处理*/
+	public void checkCoolHostsVersion(){
+		String []ans =Lib.echoBuffer.split("\n");
+		Lib.SHOWADPAGE=ans[0];
+		/**由于主机服务商设置，可能会出现防火墙，导致网站连不上，但是会获取一些杂乱的信息，此处排除这种可能*/
+		if(ans[1].indexOf('.')>0&&ans[1].length()<10){
+			Lib.REMOTECHVERSION=ans[1];
+			Lib.COOLHOSTS_UPDATE_LINK=ans[2];
+			if(!Lib.REMOTECHVERSION.equals(Lib.LOCALCHVERSION))
+				showVersion();
+			else{
+				Toast.makeText(this, R.string.nonewversion, Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
@@ -264,17 +294,17 @@ public class CoolHosts extends Activity {
 		
 	}
 	 public void onActivityResult(int requestCode, int resultCode, Intent data) {  
-	        // TODO Auto-generated method stub  
-	        if(resultCode == Activity.RESULT_OK&&requestCode == Lib.FILE_SELECT_CODE){
-	        	if(data.getData()!=null){
-	        		Uri uri=data.getData();
-	        		Lib.LOCALCUSTOMHOSTSPATH=uri.getPath();
-	        		Toast.makeText(this, "现在你可以点击一键更新从本地更新了～", Toast.LENGTH_SHORT).show();
-	        		Lib.UPDATEMODE=1;
-	        	}
-	        }
-	        super.onActivityResult(requestCode, resultCode, data);  
-	    }  
+        // TODO Auto-generated method stub  
+        if(resultCode == Activity.RESULT_OK&&requestCode == Lib.FILE_SELECT_CODE){
+        	if(data.getData()!=null){
+        		Uri uri=data.getData();
+        		Lib.LOCALCUSTOMHOSTSPATH=uri.getPath();
+        		Toast.makeText(this, "现在你可以点击一键更新从本地更新了～", Toast.LENGTH_SHORT).show();
+        		Lib.UPDATEMODE=1;
+        	}
+        }
+        super.onActivityResult(requestCode, resultCode, data);  
+    } 
 }
 
 
