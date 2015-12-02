@@ -12,6 +12,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
+import com.find.coolhosts.R;
+import com.find.coolhosts.R.string;
+
 public class FileCopier extends AsyncTask<Object, Void, Boolean>
 {
 	private CoolHosts callback;

@@ -7,6 +7,8 @@ import java.io.IOException;
 
 import org.apache.http.util.EncodingUtils;
 
+import com.find.coolhosts.R;
+
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;

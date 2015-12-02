@@ -2,8 +2,11 @@ package com.find.coolhosts;
 
 
 import java.util.LinkedList;
+
+import com.find.coolhosts.R;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+
 import java.util.Queue;
 
 import android.annotation.SuppressLint;
@@ -62,13 +65,13 @@ public class CoolHosts extends Activity {
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
-//        taskQueue.add(TASK.GETHOSTSVERSION);
+        taskQueue.add(TASK.GETHOSTSVERSION);
         taskQueue.add(TASK.GETCHVERSION);
-        
-//        AdView mAdView = (AdView) findViewById(R.id.adView);
-//        AdRequest adRequest = new AdRequest.Builder().build();
-//        mAdView.loadAd(adRequest);
         doNextTask();
+        
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }  
 	public void setButtons(){
 		btnListener=new ButtonListener();
@@ -140,7 +143,7 @@ public class CoolHosts extends Activity {
 	/**CoolHosts版本更新*/
 	public void showVersion(){
 		AlertDialog.Builder builderAbout = new AlertDialog.Builder(CoolHosts.this);
-		builderAbout.setMessage(getString(R.string.local_version)+Lib.LOCALCHVERSION+"\n"+getString(R.string.remote_version)+Lib.REMOTECHVERSION+"\n"+getString(R.string.updatechnote));
+		builderAbout.setMessage(getString(R.string.local_version)+Lib.LOCALCHVERSION+"\n"+getString(R.string.remote_version)+Lib.REMOTECHVERSION+"\n"+Lib.UPDATE_INFO.replace("#", "\n"));
 		builderAbout.setTitle(R.string.updatechversion);
 		builderAbout.setCancelable(true);
 		builderAbout.setPositiveButton("更新", new DialogInterface.OnClickListener(){
@@ -154,7 +157,7 @@ public class CoolHosts extends Activity {
 				req.setTitle("CoolHosts.apk");
 		    	req.setDescription("下载完后请点击打开");
 		    	req.setMimeType("application/vnd.android.package-archive");
-		    	long downloadId = dm.enqueue(req);
+		    	dm.enqueue(req);
 				dialog.cancel();
 				
 			}});
@@ -202,8 +205,10 @@ public class CoolHosts extends Activity {
 		Lib.SHOWADPAGE=ans[0];
 		/**由于主机服务商设置，可能会出现防火墙，导致网站连不上，但是会获取一些杂乱的信息，此处排除这种可能*/
 		if(ans[1].indexOf('.')>0&&ans[1].length()<10){
-			Lib.REMOTECHVERSION=ans[1];
-			Lib.COOLHOSTS_UPDATE_LINK=ans[2];
+			Lib.REMOTECHVERSION=ans[1]==null?"":ans[1];
+			Lib.COOLHOSTS_UPDATE_LINK=ans[2]==null?"":ans[2];
+			Lib.UPDATE_INFO=ans[3]==null?"":ans[3];
+			Log.e(TAG, Lib.UPDATE_INFO);
 			if(!Lib.REMOTECHVERSION.equals(Lib.LOCALCHVERSION))
 				showVersion();
 			else{
@@ -263,7 +268,7 @@ public class CoolHosts extends Activity {
 					    	 public void onClick(DialogInterface dialog, int which) {
 					    		 Lib.SOURCE=et.getText().toString();
 					    		 CoolHosts.this.appendOnConsole(getConsole(), true, R.string.customhostsaddressnote);
-//					    		 Toast.makeText(CoolHosts.this, "Host源已经切换，仅此次有效，重启应用后恢复为默认的findspace的源", Toast.LENGTH_SHORT).show();
+					    		 Toast.makeText(CoolHosts.this, "Host源已经切换，仅此次有效，重启应用后恢复为默认的findspace的源", Toast.LENGTH_SHORT).show();
 					    	 }})
 					     .setNegativeButton("取消", null).show();
 				break;
@@ -287,7 +292,8 @@ public class CoolHosts extends Activity {
                 CoolHosts.this.startActivity(intent2);
 				break;
 			case R.id.more:
-				Toast.makeText(CoolHosts.this, "wait for next time~", Toast.LENGTH_SHORT).show();
+				Intent intentMore=new Intent(CoolHosts.this,MoreFunctions.class);
+				CoolHosts.this.startActivity(intentMore);
 				break;
 			}
 		}

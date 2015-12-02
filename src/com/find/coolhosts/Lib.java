@@ -10,37 +10,38 @@ import android.util.Log;
 
 public final class Lib {
 	/**Hosts源地址*/
-	static String SOURCE="http://googleips-google.stor.sinaapp.com/hosts";
-	static final String HOSTS_VERSION_URL="http://googleips-google.stor.sinaapp.com/updateTime";
+	public static String SOURCE="http://googleips-google.stor.sinaapp.com/hosts";
+	public static final String HOSTS_VERSION_URL="http://googleips-google.stor.sinaapp.com/updateTime";
 	static final String REMOTEVERSION="";
 	private static final String TAG=Lib.class.getSimpleName();
 	static final String NOT_EXIST="Don't Exist.";
 	static final String READ_ERROR="Read Error.";
 	static final String TIMEMARK_HEAD="#+UPDATE_TIME";
 	static final String LOG_NAME="CoolHosts";
-	static final String HOSTSPATH="/system/etc/hosts";
-	static String REMOTE_VERSION="";
-	static String LOCALCHVERSION="";
-	static String REMOTECHVERSION="";
+	public static final String HOSTSPATH="/system/etc/hosts";
+	public static String REMOTE_VERSION="";
+	public static String LOCALCHVERSION="";
+	public static String REMOTECHVERSION="";
 	static final String EMPTH_STRING="";
 	static final String MY_AD_UNIT_ID="ca-app-pub-8527554614606787/5603479557";
 	/**获取的字符串buffer，包括要展示的页面链接，版本号，新版本下载地址*/
-	static String echoBuffer="";
-	static String COOLHOSTS_UPDATE_LINK="";
+	public static String echoBuffer="";
+	public static String COOLHOSTS_UPDATE_LINK="";
+	public static String UPDATE_INFO="";
 	//testid
 //	static final String MY_AD_UNIT_ID="ca-app-pub-3940256099942544/1033173712";
 	//存在本地文件名
-	static final String HOSTSINCACHE="hosts";
-	static String SHOWADPAGE;
+	public static final String HOSTSINCACHE="hosts";
+	public static String SHOWADPAGE;
 	/**自定义本地文件源的路径*/
-	static String LOCALCUSTOMHOSTSPATH="";
+	public static String LOCALCUSTOMHOSTSPATH="";
 	/**是否成功*/
-	static boolean isSuccessed=false;
+	public static boolean isSuccessed=false;
 	/**读取本地hosts文件时需要的返回码*/
-	static final int FILE_SELECT_CODE=2;
+	public static final int FILE_SELECT_CODE=2;
 	/**更新模式
 	 * @value 0:默认hosts源;1:本地文件源*/
-	static int UPDATEMODE=0;
+	public static int UPDATEMODE=0;
     /**Get The local version mark
      * getExternalCacheDir
      * */

@@ -12,11 +12,10 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
-/**发送get请求，getversion=0 || 1 <br>0：只是获取推送页面的网址<br>1:获取最新的版本号<br>返回值：要显示的网页网址以及最新的程序版本*/
 public class SendGetApplication extends AsyncTask<Integer, Void, String> {
 	CoolHosts caller;
 	public SendGetApplication(CoolHosts caller) {
@@ -62,22 +61,6 @@ public class SendGetApplication extends AsyncTask<Integer, Void, String> {
 			Lib.echoBuffer=result;
 			caller.checkCoolHostsVersion();
 		}
-//		else{
-//			String[] ans=result.split("\n");
-//			Log.d(CoolHosts.TAG, ans[0]);
-//			Log.d(CoolHosts.TAG, ans[1]);
-//			if(isGetVersion==0)
-//				/**要显示的网页（站内）*/
-//				Lib.SHOWADPAGE=ans[0];
-////				caller.setWebview(ans[0]);
-//			else{
-//				Lib.REMOTECHVERSION=ans[1];
-//				if(!Lib.REMOTECHVERSION.equals(Lib.LOCALCHVERSION))
-//					caller.showVersion();
-//				else{
-//					Toast.makeText(caller, R.string.nonewversion, Toast.LENGTH_SHORT).show();
-//				}
-//			}
 			caller.doNextTask();
 	}
 }

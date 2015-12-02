@@ -1,5 +1,9 @@
 package com.find.coolhosts;
 
+import com.find.coolhosts.R;
+import com.find.coolhosts.R.id;
+import com.find.coolhosts.R.layout;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;

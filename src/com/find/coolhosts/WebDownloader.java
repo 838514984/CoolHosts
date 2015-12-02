@@ -11,6 +11,9 @@ import java.net.URLConnection;
 
 import org.apache.http.util.ByteArrayBuffer;
 
+import com.find.coolhosts.R;
+import com.find.coolhosts.R.string;
+
 import android.os.AsyncTask;
 import android.util.Log;
 

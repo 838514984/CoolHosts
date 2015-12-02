@@ -1,6 +1,7 @@
 package com.find.coolhosts;
 
 
+import com.find.coolhosts.R;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -81,7 +82,7 @@ public class LoadingButton extends View{
         
     }
     //默认的onclick方法
-    protected void setOnClickDefault(){
+    public void setOnClickDefault(){
     	this.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

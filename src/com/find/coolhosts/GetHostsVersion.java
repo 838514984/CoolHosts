@@ -6,6 +6,9 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import com.find.coolhosts.R;
+import com.find.coolhosts.R.string;
+
 import android.os.AsyncTask;
 
 public class GetHostsVersion extends AsyncTask<Integer, Void, String>{
