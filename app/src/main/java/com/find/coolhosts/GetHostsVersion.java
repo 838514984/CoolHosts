@@ -18,7 +18,11 @@ public class GetHostsVersion extends AsyncTask<Integer, Void, String>{
 		try {
 			URL url=new URL(Lib.HOSTS_VERSION_URL);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(),"UTF-8"));
-			return reader.readLine();
+            String temp = reader.readLine();
+            while(temp.charAt(0)==' '){
+                temp = temp.substring(1,temp.length());
+            }
+			return temp;
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

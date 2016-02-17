@@ -87,3 +87,5 @@ TODO
 ##2016.1.17
 服务器端重写，接口更新，更新下客户端的接口使用。
 代码都切换到了Android Studio.
+##February 1, 2016 12:52 PM
+代码切换到android studio，由于hosts源已经完全自动抓取辅以人工修补，且用python tornado重写了，添加了coolhosts的请求地址，所以coolhosts中的一些api也要更新。

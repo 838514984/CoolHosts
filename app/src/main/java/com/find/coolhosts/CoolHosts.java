@@ -189,6 +189,7 @@ public class CoolHosts extends Activity {
 				new FileCopier(CoolHosts.this).execute(Lib.LOCALCUSTOMHOSTSPATH, Lib.HOSTSPATH);
 				break;
 			case AFTERWORK:
+				// 格式统一下
 				appendOnConsole(versionConsole,false,getString(R.string.local_version)+Lib.getlocalversion());
 				appendOnConsole(versionConsole,true,getString(R.string.remote_version)+Lib.getRemoteVersion());
 				break;

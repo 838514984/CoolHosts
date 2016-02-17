@@ -1,20 +1,20 @@
 package com.find.coolhosts;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import android.util.Log;
-
 public final class Lib {
 	/**Hosts源地址*/
-	public static String SOURCE="http://googleips-google.stor.sinaapp.com/hosts";
-	public static final String HOSTS_VERSION_URL="http://googleips-google.stor.sinaapp.com/updateTime";
+	public static String SOURCE="http://googlehosts-hostsfiles.stor.sinaapp.com/hosts";
+	public static final String HOSTS_VERSION_URL="http://googlehosts-hostsfiles.stor.sinaapp.com/updateTime";
 	static final String REMOTEVERSION="";
 	private static final String TAG=Lib.class.getSimpleName();
-	static final String NOT_EXIST="Don't Exist.";
+	static final String NOT_EXIST="Not Exist.";
 	static final String READ_ERROR="Read Error.";
 	static final String TIMEMARK_HEAD="#+UPDATE_TIME";
 	static final String LOG_NAME="CoolHosts";
@@ -28,6 +28,8 @@ public final class Lib {
 	public static String echoBuffer="";
 	public static String COOLHOSTS_UPDATE_LINK="";
 	public static String UPDATE_INFO="";
+	/**获取关于coolhosts版本的信息*/
+	public static final String COOLHOSTS_VERSION_INFO="http://hosts.findspace.name/coolhosts";
 	//testid
 //	static final String MY_AD_UNIT_ID="ca-app-pub-3940256099942544/1033173712";
 	//存在本地文件名
@@ -74,6 +76,10 @@ public final class Lib {
 		} catch (IOException e) {
 			versionText=Lib.READ_ERROR;
 			e.printStackTrace();
+		}
+		//去掉开头的空格
+		while(versionText.charAt(0)==' '){
+			versionText = versionText.substring(1,versionText.length());
 		}
     	return versionText;
     }
