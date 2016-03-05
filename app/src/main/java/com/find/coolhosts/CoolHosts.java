@@ -1,13 +1,6 @@
 package com.find.coolhosts;
 
 
-import java.util.LinkedList;
-
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-
-import java.util.Queue;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -27,7 +20,11 @@ import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-public class CoolHosts extends Activity {  
+
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class CoolHosts extends Activity {
   
 	private boolean root;
 	private TextView console,versionConsole;
@@ -67,11 +64,7 @@ public class CoolHosts extends Activity {
         taskQueue.add(TASK.GETHOSTSVERSION);
         taskQueue.add(TASK.GETCHVERSION);
         doNextTask();
-        
-        AdView mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-    }  
+    }
 	public void setButtons(){
 		btnListener=new ButtonListener();
 		ad=(Button)findViewById(R.id.ad);
@@ -116,7 +109,7 @@ public class CoolHosts extends Activity {
      * 更新console
      * @param textview: 更新哪个textview
      * @param isAppend: 追加还是覆盖
-     * @param ids: R.string.值*/
+     * @param id: R.string.值*/
     public void appendOnConsole(TextView textview,boolean isAppend,final int ...id ){
     	if(!isAppend)textview.setText("");
     	for(int i:id){

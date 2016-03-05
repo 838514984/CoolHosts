@@ -7,9 +7,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-
 public class MoreFunctions extends Activity{
 	
 	Button catHosts;
@@ -20,11 +17,7 @@ public class MoreFunctions extends Activity{
 		setContentView(R.layout.morefunctions);
 		
 		
-		AdView mAdView = (AdView) findViewById(R.id.adView);
-		AdRequest adRequest = new AdRequest.Builder().build();
-		mAdView.loadAd(adRequest);
-		
-		
+
 		
 		catHosts=(Button)findViewById(R.id.catHosts);
 		catHosts.setOnClickListener(new OnClickListener() {

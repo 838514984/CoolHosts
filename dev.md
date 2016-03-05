@@ -89,3 +89,9 @@ TODO
 代码都切换到了Android Studio.
 ##February 1, 2016 12:52 PM
 代码切换到android studio，由于hosts源已经完全自动抓取辅以人工修补，且用python tornado重写了，添加了coolhosts的请求地址，所以coolhosts中的一些api也要更新。
+##星期六, 05. 三月 2016 10:47下午 
+去掉了广告。app里的广告并没有给我带来多大的收入，反而很讨厌。
+下次的更新TODOList：
+
++ 增加追加hosts功能
++ 管理自定义源
