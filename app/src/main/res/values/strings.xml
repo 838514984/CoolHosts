@@ -31,7 +31,7 @@
 	<string name="customhostsaddressnote">Host源已经切换，请点击一键更新进行更新，仅此次有效，重启应用后恢复为默认的findspace.name的源</string>
 	<string name="updatehostssuccessed">更新成功，别忘了点击帮助更新哦～</string>
 	<string name="updatehostsfailed">更新失败了，请到博客留言</string>
-	<string name="adnote">麻烦点击博客Logo下面的广告来贡献你的力量吧～\n新浪微博@FindSpace博客\n邮件： find@findspace.name</string>
+	<string name="adnote">支付宝捐赠find@findspace.name\n你的每一元捐赠都是app开发的动力。</string>
 	<string name="readfromfile">从文件读</string>
 	<string name="readfromfilenote">正在从本地读取hosts，本地hosts文件源地址是：</string>
 </resources>

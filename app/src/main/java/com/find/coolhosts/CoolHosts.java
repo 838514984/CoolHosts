@@ -77,8 +77,6 @@ public class CoolHosts extends Activity {
 		clearHosts.setOnClickListener(btnListener);
 		help=(Button)findViewById(R.id.help);
 		help.setOnClickListener(btnListener);
-		more=(Button)findViewById(R.id.more);
-		more.setOnClickListener(btnListener);
 		console=(TextView)findViewById(R.id.console);
 		console.setMovementMethod(new ScrollingMovementMethod());
 		versionConsole=(TextView)findViewById(R.id.versionConsole);
@@ -253,17 +251,21 @@ public class CoolHosts extends Activity {
                 intent.putExtra("url","http://www.findspace.name");
                 CoolHosts.this.startActivity(intent);
 				break;
+//			case R.id.customehosts:
+//				final EditText et = new EditText(CoolHosts.this);
+//				new AlertDialog.Builder(CoolHosts.this).setTitle("请输入源地址").setIcon(
+//					     android.R.drawable.ic_dialog_info).setView(
+//					    et).setPositiveButton("确定",new DialogInterface.OnClickListener() {
+//					    	 public void onClick(DialogInterface dialog, int which) {
+//					    		 Lib.SOURCE=et.getText().toString();
+//					    		 CoolHosts.this.appendOnConsole(getConsole(), true, R.string.customhostsaddressnote);
+//					    		 Toast.makeText(CoolHosts.this, "Host源已经切换，仅此次有效，重启应用后恢复为默认的findspace的源", Toast.LENGTH_SHORT).show();
+//					    	 }})
+//					     .setNegativeButton("取消", null).show();
+//				break;
 			case R.id.customehosts:
-				final EditText et = new EditText(CoolHosts.this);
-				new AlertDialog.Builder(CoolHosts.this).setTitle("请输入源地址").setIcon(
-					     android.R.drawable.ic_dialog_info).setView(
-					    et).setPositiveButton("确定",new DialogInterface.OnClickListener() {
-					    	 public void onClick(DialogInterface dialog, int which) {
-					    		 Lib.SOURCE=et.getText().toString();
-					    		 CoolHosts.this.appendOnConsole(getConsole(), true, R.string.customhostsaddressnote);
-					    		 Toast.makeText(CoolHosts.this, "Host源已经切换，仅此次有效，重启应用后恢复为默认的findspace的源", Toast.LENGTH_SHORT).show();
-					    	 }})
-					     .setNegativeButton("取消", null).show();
+				Intent intent_custom = new Intent(CoolHosts.this, Manage_source_list.class);
+				CoolHosts.this.startActivity(intent_custom);
 				break;
 			case R.id.readfromfile:
 				Intent intent3 = new Intent(Intent.ACTION_GET_CONTENT);
@@ -284,10 +286,11 @@ public class CoolHosts extends Activity {
                 intent2.putExtra("url","http://www.findspace.name/easycoding/503");
                 CoolHosts.this.startActivity(intent2);
 				break;
-			case R.id.more:
-				Intent intentMore=new Intent(CoolHosts.this,MoreFunctions.class);
-				CoolHosts.this.startActivity(intentMore);
+			case R.id.catHosts:
+				Intent intentCatHosts=new Intent(CoolHosts.this,CatHosts.class);
+				CoolHosts.this.startActivity(intentCatHosts);
 				break;
+
 			}
 		}
 		

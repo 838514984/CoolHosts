@@ -22,7 +22,7 @@
         </activity>
         <activity android:name=".AdPage" android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".MoreFunctions" android:screenOrientation="portrait" >
+        <activity android:name=".Manage_source_list" android:screenOrientation="portrait" >
         </activity>
     </application>
 

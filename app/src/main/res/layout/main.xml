@@ -118,15 +118,14 @@
                 android:layout_weight="1"
                 android:drawableTop="@drawable/help"
                 android:text="@string/help" />
-
             <Button
-                android:id="@+id/more"
+                android:id="@+id/catHosts"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:drawableTop="@drawable/more"
-                android:text="@string/more" />
+                android:drawableTop="@drawable/cathosts"
+                android:text="@string/catHosts" />
         </LinearLayout>
     </LinearLayout>
 
