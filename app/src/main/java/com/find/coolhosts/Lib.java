@@ -11,6 +11,7 @@ import java.io.IOException;
 public final class Lib {
 	/**Hosts源地址*/
 	public static String SOURCE="http://googlehosts-hostsfiles.stor.sinaapp.com/hosts";
+    /**服务器Hosts源更新的时间戳，检查时间请用这个接口，而不是每次都要下载整个hosts文件*/
 	public static final String HOSTS_VERSION_URL="http://googlehosts-hostsfiles.stor.sinaapp.com/updateTime";
 	static final String REMOTEVERSION="";
 	private static final String TAG=Lib.class.getSimpleName();

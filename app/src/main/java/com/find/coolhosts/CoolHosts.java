@@ -16,7 +16,6 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,7 +37,9 @@ public class CoolHosts extends Activity {
 	public CheckCoolHostsVersion getVersion;
 	private ButtonListener btnListener;
 	
-	
+	/**
+	 * GetHostsVersion: 获取服务器上的hosts版本
+     * GetCHVersion: 获取服务器上coolhosts的最新版本号*/
 	private enum TASK
 	{
 		DOWNHOSTS,COPYNEWHOSTSFROMWEB,COPYNEWHOSTSFROMLOCAL,DELETEOLDHOSTS,GETCHVERSION,GETHOSTSVERSION,AFTERWORK
@@ -54,14 +55,15 @@ public class CoolHosts extends Activity {
         Log.v(TAG, CACHEDIR);
         setButtons();
         taskQueue = new LinkedList<TASK>();
-        
+        //检查CoolHosts的版本
         try {
         	getVersion=new CheckCoolHostsVersion(CoolHosts.this);
 			getVersion.getLocalVersion();
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
-        taskQueue.add(TASK.GETHOSTSVERSION);
+        // 调试时，注释掉这个任务，以免因而我i过多地访问服务器而导致ip被封禁
+//        taskQueue.add(TASK.GETHOSTSVERSION);
         taskQueue.add(TASK.GETCHVERSION);
         doNextTask();
     }
@@ -264,7 +266,7 @@ public class CoolHosts extends Activity {
 //					     .setNegativeButton("取消", null).show();
 //				break;
 			case R.id.customehosts:
-				Intent intent_custom = new Intent(CoolHosts.this, Manage_source_list.class);
+				Intent intent_custom = new Intent(CoolHosts.this, ManageSourceList.class);
 				CoolHosts.this.startActivity(intent_custom);
 				break;
 			case R.id.readfromfile:

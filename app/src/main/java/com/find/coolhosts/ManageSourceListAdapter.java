@@ -14,9 +14,9 @@ import java.util.HashMap;
 /**
  * Created by find on 16-7-4.
  */
-public class Manage_source_list_adapter extends BaseAdapter{
+public class ManageSourceListAdapter extends BaseAdapter{
     // 要填充的数据
-    public ArrayList<Source_Info> source_list;
+    public ArrayList<SourceInfo> source_list;
     // checkbox的选中状态
     public HashMap<Integer, Boolean> checkboxStatus;
     private Context context;
@@ -24,7 +24,7 @@ public class Manage_source_list_adapter extends BaseAdapter{
     private LayoutInflater inflater = null;
     // TODO： 还需要从这里传入原来已经选好的状态
 
-    public Manage_source_list_adapter(ArrayList<Source_Info> a_list, Context context){
+    public ManageSourceListAdapter(ArrayList<SourceInfo> a_list, Context context){
         this.context = context;
         this.source_list = a_list;
         this.inflater = LayoutInflater.from(context);

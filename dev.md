@@ -103,3 +103,5 @@ TODO：
 + 捐赠问题
 + 管理源部分添加删除功能
 + 管理源布局的优化，现在没法自动扩展布局
+## July 13, 2016 8:39 PM
+去除了过时的HTTPClient，使用HTTPUrlConnection。
