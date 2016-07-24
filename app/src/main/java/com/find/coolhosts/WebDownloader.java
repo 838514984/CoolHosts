@@ -34,7 +34,7 @@ public class WebDownloader extends AsyncTask<String, Void, File>{
                 baf.append((byte) current);
             }
             
-            f = new File(CoolHosts.CACHEDIR, params[1]);
+            f = new File(Lib.CACHEDIR, params[1]);
             FileOutputStream fos = new FileOutputStream(f);
             fos.write(baf.toByteArray());
             fos.close();

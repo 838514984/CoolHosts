@@ -33,7 +33,6 @@ public class CoolHosts extends Activity {
 	
 	public static final String TAG="coolhosts";
 	private boolean netState=false;
-	public static String CACHEDIR;
 	public CheckCoolHostsVersion getVersion;
 	private ButtonListener btnListener;
 	
@@ -50,9 +49,9 @@ public class CoolHosts extends Activity {
     @Override  
     public void onCreate(Bundle savedInstanceState) {  
         super.onCreate(savedInstanceState);  
-        setContentView(R.layout.main);  
-        CACHEDIR=getFilesDir().toString();
-        Log.v(TAG, CACHEDIR);
+        setContentView(R.layout.main);
+        Lib.CACHEDIR=getFilesDir().toString();
+        Log.v(TAG, Lib.CACHEDIR);
         setButtons();
         taskQueue = new LinkedList<TASK>();
         //检查CoolHosts的版本
@@ -93,6 +92,7 @@ public class CoolHosts extends Activity {
 			   }
 			  });
 	}
+    @Override
     public void onResume (){
     	super.onResume();
     	root=RootChecker.hasRoot();
@@ -161,7 +161,7 @@ public class CoolHosts extends Activity {
 			switch(taskQueue.remove()){
 			case COPYNEWHOSTSFROMWEB:
 				appendOnConsole(getConsole(),true,R.string.copyingnewhosts);
-				new FileCopier(CoolHosts.this).execute(CACHEDIR + "/hosts", Lib.HOSTSPATH);
+				new FileCopier(CoolHosts.this).execute(Lib.CACHEDIR + "/hosts", Lib.HOSTSPATH);
 				break;
 			case DELETEOLDHOSTS:
 				appendOnConsole(getConsole(),true,R.string.deleteoldhosts);

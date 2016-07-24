@@ -45,6 +45,10 @@ public final class Lib {
 	/**更新模式
 	 * @value 0:默认hosts源;1:本地文件源*/
 	public static int UPDATEMODE=0;
+    /**内置存储空间*/
+    public static String CACHEDIR = "";
+
+
     /**Get The local version mark
      * getExternalCacheDir
      * */

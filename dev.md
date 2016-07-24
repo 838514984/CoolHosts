@@ -105,3 +105,22 @@ TODO：
 + 管理源布局的优化，现在没法自动扩展布局
 ## July 13, 2016 8:39 PM
 去除了过时的HTTPClient，使用HTTPUrlConnection。
+## July 24, 2016 3:09 PM
+管理源功能：
+TODO
+
++ 源优先级排序功能
++ 默认findspace的怎么办？
+
+添加个多选框：追加到findspace hosts 后面。
+配置文件的读取加到哪里？
+加到coolhosts首页的queue里？还是放在打开管理源的时候。
+使用sharedperferences存储自定义hosts源，
+优先级作为key。目前只需要url作为value。每个条目开启与否，单独存一个key：“use_map”,为一个int，通过位移每一位01判断是否使用。总数key：“sum”
+注意resume函数的重写。
+layout中采用label，只能删除和新添加，不能编辑。
+优先级问题，移动，添加按钮？
+
+
+
+
