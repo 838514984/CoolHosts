@@ -24,18 +24,18 @@ public class ManageSourceListAdapter extends BaseAdapter{
     private LayoutInflater inflater = null;
     // TODO： 还需要从这里传入原来已经选好的状态
 
-    public ManageSourceListAdapter(ArrayList<SourceInfo> a_list, Context context){
+    public ManageSourceListAdapter(ArrayList<SourceInfo> a_list, HashMap<Integer, Boolean>selected_state, Context context){
         this.context = context;
         this.source_list = a_list;
         this.inflater = LayoutInflater.from(context);
-        checkboxStatus = new HashMap<Integer, Boolean>();
-        init_Data();
+        checkboxStatus = selected_state;
+//        init_Data();
     }
-    private void init_Data(){
-        for(int i = 0; i < source_list.size(); i++){
-            checkboxStatus.put(i, false);
-        }
-    }
+//    private void init_Data(){
+//        for(int i = 0; i < source_list.size(); i++){
+//            checkboxStatus.put(i, false);
+//        }
+//    }
     @Override
     public int getCount() {
         return source_list.size();
