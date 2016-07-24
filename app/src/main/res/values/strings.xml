@@ -34,4 +34,5 @@
 	<string name="adnote">支付宝捐赠find@findspace.name\n你的每一元捐赠都是app开发的动力。</string>
 	<string name="readfromfile">从文件读</string>
 	<string name="readfromfilenote">正在从本地读取hosts，本地hosts文件源地址是：</string>
+    <string name="addnewsource">添加新源</string>
 </resources>

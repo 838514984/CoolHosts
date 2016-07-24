@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,7 +57,7 @@ public class ManageSourceListAdapter extends BaseAdapter{
         if(convertView == null){
             holder = new ViewHolder();
             convertView = inflater.inflate(R.layout.item_list, null);
-            holder.source_url = (EditText)convertView.findViewById(R.id.source_url);
+            holder.source_url = (TextView)convertView.findViewById(R.id.url_tv);
             holder.cb = (CheckBox) convertView.findViewById(R.id.checkBox);
             convertView.setTag(holder);
         }else{
@@ -68,7 +68,7 @@ public class ManageSourceListAdapter extends BaseAdapter{
         return  convertView;
     }
     public static class ViewHolder{
-        EditText source_url;
+        TextView source_url;
         CheckBox cb;
     }
 }
