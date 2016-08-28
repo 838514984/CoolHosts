@@ -9,10 +9,14 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public final class Lib {
-	/**Hosts源地址*/
-	public static String SOURCE="http://googlehosts-hostsfiles.stor.sinaapp.com/hosts";
+//	/**Hosts源地址*/
+//	public static String SOURCE="http://googlehosts-hostsfiles.stor.sinaapp.com/hosts";
+//    /**服务器Hosts源更新的时间戳，检查时间请用这个接口，而不是每次都要下载整个hosts文件*/
+//	public static final String HOSTS_VERSION_URL="http://googlehosts-hostsfiles.stor.sinaapp.com/updateTime";
+    /**Hosts源地址*/
+    public static String SOURCE="http://211.87.235.101:8000/hosts";
     /**服务器Hosts源更新的时间戳，检查时间请用这个接口，而不是每次都要下载整个hosts文件*/
-	public static final String HOSTS_VERSION_URL="http://googlehosts-hostsfiles.stor.sinaapp.com/updateTime";
+    public static final String HOSTS_VERSION_URL="http://211.87.235.101:8000/updateTime";
 	static final String REMOTEVERSION="";
 	private static final String TAG=Lib.class.getSimpleName();
 	static final String NOT_EXIST="Not Exist.";
@@ -31,8 +35,6 @@ public final class Lib {
 	public static String UPDATE_INFO="";
 	/**获取关于coolhosts版本的信息*/
 	public static final String COOLHOSTS_VERSION_INFO="http://hosts.findspace.name/coolhosts";
-	//testid
-//	static final String MY_AD_UNIT_ID="ca-app-pub-3940256099942544/1033173712";
 	//存在本地文件名
 	public static final String HOSTSINCACHE="hosts";
 	public static String SHOWADPAGE;

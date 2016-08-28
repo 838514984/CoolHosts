@@ -23,7 +23,7 @@ public class CatHosts extends Activity {
 		setContentView(R.layout.cathosts);
 		
 		showHosts=(EditText)findViewById(R.id.showHosts);
-		showHosts.setText("Loading...");
+		showHosts.setText("Loading...如果host文件过大，加载时间可能会很长");
 		showHosts.setKeyListener(null);
 		readHosts.execute();
 		

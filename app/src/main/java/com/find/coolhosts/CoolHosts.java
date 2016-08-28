@@ -16,6 +16,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,7 +28,7 @@ public class CoolHosts extends Activity {
   
 	private boolean root;
 	private TextView console,versionConsole;
-	private Button ad,customHosts,customIP,clearHosts,help,more;
+	private Button ad,customHosts,customIP,clearHosts,help,catHosts;
 	private LoadingButton oneKey;
 	private ScrollView scrollView;
 	
@@ -62,7 +63,7 @@ public class CoolHosts extends Activity {
 			e.printStackTrace();
 		}
         // 调试时，注释掉这个任务，以免因而我i过多地访问服务器而导致ip被封禁
-//        taskQueue.add(TASK.GETHOSTSVERSION);
+        taskQueue.add(TASK.GETHOSTSVERSION);
         taskQueue.add(TASK.GETCHVERSION);
         doNextTask();
     }
@@ -76,6 +77,8 @@ public class CoolHosts extends Activity {
 		customIP.setOnClickListener(btnListener);
 		clearHosts=(Button)findViewById(R.id.clearHosts);
 		clearHosts.setOnClickListener(btnListener);
+        catHosts = (Button)findViewById(R.id.catHosts);
+        catHosts.setOnClickListener(btnListener);
 		help=(Button)findViewById(R.id.help);
 		help.setOnClickListener(btnListener);
 		console=(TextView)findViewById(R.id.console);
@@ -103,7 +106,6 @@ public class CoolHosts extends Activity {
                 Toast.makeText(getApplicationContext(),note,Toast.LENGTH_SHORT).show();
             }
         });
-//    	oneKey.setOnClickListener(btnListener);
     }
     /**Update the console textview
      * 更新console
@@ -204,15 +206,7 @@ public class CoolHosts extends Activity {
 			Log.e(TAG, Lib.UPDATE_INFO);
 			if(!Lib.REMOTECHVERSION.equals(Lib.LOCALCHVERSION))
 				showVersion();
-			else{
-				Toast.makeText(this, R.string.nonewversion, Toast.LENGTH_SHORT).show();
-			}
 		}
-	}
-	/**cat hosts' content*/
-	public void catHosts(){
-		Intent catIntent=new Intent(CoolHosts.this,CatHosts.class);
-		CoolHosts.this.startActivity(catIntent);
 	}
 	public void setOneKeyState(int num){
 		oneKey.setTargetProgress(num);
@@ -248,27 +242,33 @@ public class CoolHosts extends Activity {
 					}
 				}
 				break;
+            // 更新为分享功能
 			case R.id.ad:
-				Intent intent=new Intent(CoolHosts.this,AdPage.class);
-                intent.putExtra("url","http://www.findspace.name");
-                CoolHosts.this.startActivity(intent);
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "我正在使用CoolHosts一键修改我的hosts，你也试试吧 http://www.findspace.name/easycoding/503 ");
+                shareIntent.setType("text/plain");
+
+                //设置分享列表的标题，并且每次都显示分享列表
+                startActivity(Intent.createChooser(shareIntent, "快分享给你的小伙伴吧！"));
+                break;
+			case R.id.customehosts:
+				final EditText et = new EditText(CoolHosts.this);
+				new AlertDialog.Builder(CoolHosts.this).setTitle("请输入源地址")
+                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .setView(et).setPositiveButton("确定",
+                            new DialogInterface.OnClickListener() {
+					    	 public void onClick(DialogInterface dialog, int which) {
+					    		 Lib.SOURCE=et.getText().toString();
+					    		 CoolHosts.this.appendOnConsole(getConsole(), true, R.string.customhostsaddressnote);
+					    		 Toast.makeText(CoolHosts.this, "Host源已经切换，仅此次有效，重启应用后恢复为默认的findspace的源", Toast.LENGTH_SHORT).show();
+					    	 }})
+					     .setNegativeButton("取消", null).show();
 				break;
 //			case R.id.customehosts:
-//				final EditText et = new EditText(CoolHosts.this);
-//				new AlertDialog.Builder(CoolHosts.this).setTitle("请输入源地址").setIcon(
-//					     android.R.drawable.ic_dialog_info).setView(
-//					    et).setPositiveButton("确定",new DialogInterface.OnClickListener() {
-//					    	 public void onClick(DialogInterface dialog, int which) {
-//					    		 Lib.SOURCE=et.getText().toString();
-//					    		 CoolHosts.this.appendOnConsole(getConsole(), true, R.string.customhostsaddressnote);
-//					    		 Toast.makeText(CoolHosts.this, "Host源已经切换，仅此次有效，重启应用后恢复为默认的findspace的源", Toast.LENGTH_SHORT).show();
-//					    	 }})
-//					     .setNegativeButton("取消", null).show();
+//				Intent intent_custom = new Intent(CoolHosts.this, ManageSourceList.class);
+//				CoolHosts.this.startActivityForResult(intent_custom, 1);
 //				break;
-			case R.id.customehosts:
-				Intent intent_custom = new Intent(CoolHosts.this, ManageSourceList.class);
-				CoolHosts.this.startActivity(intent_custom);
-				break;
 			case R.id.readfromfile:
 				Intent intent3 = new Intent(Intent.ACTION_GET_CONTENT);
 				intent3.setType("*/*");
@@ -284,6 +284,7 @@ public class CoolHosts extends Activity {
 				doNextTask();
 				break;
 			case R.id.help:
+                Log.d(TAG, "点击help");
 				Intent intent2=new Intent(CoolHosts.this,AdPage.class);
                 intent2.putExtra("url","http://www.findspace.name/easycoding/503");
                 CoolHosts.this.startActivity(intent2);
@@ -299,16 +300,27 @@ public class CoolHosts extends Activity {
 	}
 	 public void onActivityResult(int requestCode, int resultCode, Intent data) {  
         // TODO Auto-generated method stub  
-        if(resultCode == Activity.RESULT_OK&&requestCode == Lib.FILE_SELECT_CODE){
-        	if(data.getData()!=null){
-        		Uri uri=data.getData();
-        		Lib.LOCALCUSTOMHOSTSPATH=uri.getPath();
-        		Toast.makeText(this, "现在你可以点击一键更新从本地更新了～", Toast.LENGTH_SHORT).show();
-        		Lib.UPDATEMODE=1;
-        	}
+        if(resultCode == Activity.RESULT_OK){
+            switch (requestCode){
+                case Lib.FILE_SELECT_CODE:
+                    if(data.getData()!=null){
+                        Uri uri=data.getData();
+                        Lib.LOCALCUSTOMHOSTSPATH=uri.getPath();
+                        Toast.makeText(this, "现在你可以点击一键更新从本地更新了～", Toast.LENGTH_SHORT).show();
+                        Lib.UPDATEMODE=1;
+                    }
+                    break;
+
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);  
-    } 
+    }
+    protected void show_Toast(String note){
+        Toast.makeText(getApplicationContext(),note,Toast.LENGTH_SHORT).show();
+    }
+    protected void show_dialog(String title, String content){
+        new AlertDialog.Builder(CoolHosts.this).setTitle(title).setMessage(content).setPositiveButton("确定",null).show();
+    }
 }
 
 

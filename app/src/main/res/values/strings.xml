@@ -24,16 +24,17 @@
 	<string name="catHosts">查看hosts</string>
 	<string name="note">该功能正在测试。。。</string>
 	<string name="nonewversion">没有发现CoolHosts的新版本。</string>
-	<string name="ad">帮助更新</string>
+	<string name="ad">分享给TA</string>
 	<string name="more">更多功能</string>
 	<string name="downloadhosts">开始下载hosts文件</string>
 	<string name="downsuccuess">下载Hosts成功！</string>
 	<string name="customhostsaddressnote">Host源已经切换，请点击一键更新进行更新，仅此次有效，重启应用后恢复为默认的findspace.name的源</string>
-	<string name="updatehostssuccessed">更新成功，别忘了点击帮助更新哦～</string>
-	<string name="updatehostsfailed">更新失败了，请到博客留言</string>
-	<string name="adnote">支付宝捐赠find@findspace.name\n你的每一元捐赠都是app开发的动力。</string>
+	<string name="updatehostssuccessed">更新成功</string>
+	<string name="updatehostsfailed">更新失败</string>
+	<string name="adnote"></string>
 	<string name="readfromfile">从文件读</string>
 	<string name="readfromfilenote">正在从本地读取hosts，本地hosts文件源地址是：</string>
     <string name="addnewsource">添加新源</string>
     <string name="addnewsourceconfirm">确定</string>
+    <string name="share_text">我正在使用CoolHosts一键修改我的hosts，你也试试吧 http://www.findspace.name/easycoding/503 </string>
 </resources>

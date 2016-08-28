@@ -37,6 +37,8 @@ public class GetHostsVersion extends AsyncTask<Integer, Void, String>{
 		Lib.REMOTE_VERSION=result;
 		caller.appendOnConsole(caller.getVersionConsole(),false,caller.getString(R.string.local_version)+Lib.getlocalversion());
 		caller.appendOnConsole(caller.getVersionConsole(),true,caller.getString(R.string.remote_version)+Lib.getRemoteVersion());
+        if(result == null)
+            caller.show_dialog("错误", "无法连接到服务器，请检查网络连接");
 		caller.appendOnConsole(caller.getConsole(), false, "");
 		caller.setNetState(true);
 		caller.doNextTask();
