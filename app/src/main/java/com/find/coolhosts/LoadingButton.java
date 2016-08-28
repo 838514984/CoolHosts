@@ -133,7 +133,7 @@ public class LoadingButton extends View{
         centerX = width/2;
         centerY = height/2;
 
-        defaultCommonDrawableWidth = (int) (width*0.5);//(int) Math.round(getWidth()/10.0);
+        defaultCommonDrawableWidth = (int) (width*0.8);//(int) Math.round(getWidth()/10.0);
         mCommonDrawable.setBounds(0,0,defaultCommonDrawableWidth,defaultCommonDrawableWidth);
         mCompleteDrawable.setBounds(0,0,defaultCommonDrawableWidth,defaultCommonDrawableWidth);
         radius = centerX - 10;
