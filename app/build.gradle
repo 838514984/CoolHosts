@@ -8,8 +8,8 @@ android {
         applicationId "com.find.coolhosts"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 14
-        versionName "2.1.4"
+        versionCode 15
+        versionName "2.1.5"
     }
     buildTypes {
         release {

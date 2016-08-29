@@ -195,19 +195,33 @@ public class CoolHosts extends Activity {
 		}
 	}
 	/**oncreate时从服务器获取coolhosts version和更新链接等信息，在此处处理*/
-	public void checkCoolHostsVersion(){
-		String []ans =Lib.echoBuffer.split("\n");
-		Lib.SHOWADPAGE=ans[0];
-		/**由于主机服务商设置，可能会出现防火墙，导致网站连不上，但是会获取一些杂乱的信息，此处排除这种可能*/
-		if(ans[1].indexOf('.')>0&&ans[1].length()<10){
-			Lib.REMOTECHVERSION=ans[1]==null?"":ans[1];
-			Lib.COOLHOSTS_UPDATE_LINK=ans[2]==null?"":ans[2];
-			Lib.UPDATE_INFO=ans[3]==null?"":ans[3];
-			Log.e(TAG, Lib.UPDATE_INFO);
-			if(!Lib.REMOTECHVERSION.equals(Lib.LOCALCHVERSION))
-				showVersion();
-		}
-	}
+	public void checkCoolHostsVersion() {
+        String[] ans = Lib.echoBuffer.split("\n");
+        Lib.SHOWADPAGE = ans[0];
+        /**由于主机服务商设置，可能会出现防火墙，导致网站连不上，但是会获取一些杂乱的信息，此处排除这种可能*/
+        if (ans[1].indexOf('.') > 0 && ans[1].length() < 10) {
+            Lib.REMOTECHVERSION = ans[1] == null ? "" : ans[1];
+            Lib.COOLHOSTS_UPDATE_LINK = ans[2] == null ? "" : ans[2];
+            Lib.UPDATE_INFO = ans[3] == null ? "" : ans[3];
+            Log.e(TAG, Lib.UPDATE_INFO);
+            // 比较两个版本号
+            String[] version_remote = Lib.REMOTECHVERSION.trim().split("\\.");
+            String[] version_local = Lib.LOCALCHVERSION.trim().split("\\.");
+            Log.e(CoolHosts.TAG, Lib.REMOTECHVERSION+"\n"+Lib.LOCALCHVERSION);
+            int compareLength = Math.min(version_remote.length, version_local.length);
+            boolean show_version = false;
+            for (int i = 0; i < compareLength; i++) {
+                int vr = Integer.valueOf(version_remote[i]);
+                int vl = Integer.valueOf(version_local[i]);
+                if (vr > vl) {
+                    show_version = true;
+                    break;
+                }
+            }
+            if (show_version)
+                showVersion();
+        }
+    }
 	public void setOneKeyState(int num){
 		oneKey.setTargetProgress(num);
 	}
