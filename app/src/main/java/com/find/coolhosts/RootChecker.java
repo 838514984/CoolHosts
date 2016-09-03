@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -49,7 +50,9 @@ public class RootChecker
 		} catch (InterruptedException ex)
 		{
 			Log.e(TAG, "Interupt exception when waiting for user to grant root permission", ex);
-		} catch (IOException ex)
+		}catch (FileNotFoundException notfound){
+            Log.e(TAG, "rootcheck.txt not found");
+        }catch (IOException ex)
 		{
 			Log.e(TAG, "IO Exception when checking if phone is rooted", ex);
 		}
@@ -73,7 +76,7 @@ public class RootChecker
 				sb.append(line);
 			}
 			return sb.toString();
-		} finally
+		}finally
 		{
 			if (br != null)
 				br.close();

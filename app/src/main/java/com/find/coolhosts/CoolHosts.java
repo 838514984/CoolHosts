@@ -1,6 +1,6 @@
 package com.find.coolhosts;
 
-
+import com.stericson.RootTools.RootTools;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -98,7 +98,8 @@ public class CoolHosts extends Activity {
     @Override
     public void onResume (){
     	super.onResume();
-    	root=RootChecker.hasRoot();
+//    	root=RootChecker.hasRoot();
+        root = RootTools.isRootAvailable();
     	oneKey.setCallback(new LoadingButton.Callback() {
             @Override
             public void complete() {
