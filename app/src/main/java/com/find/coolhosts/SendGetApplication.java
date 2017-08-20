@@ -28,6 +28,7 @@ public class SendGetApplication extends AsyncTask<Integer, Void, String> {
 	@Override
 	protected String doInBackground(Integer... temp) {
         try {
+            Log.e("Getter", "获取coolhosts版本信息");
             URL url = new URL(Lib.COOLHOSTS_VERSION_INFO);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");

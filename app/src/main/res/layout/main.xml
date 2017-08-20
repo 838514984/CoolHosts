@@ -9,21 +9,22 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
-        android:orientation="vertical" >
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/versionConsole"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp"
             android:layout_weight="1"
             android:fadeScrollbars="false"
             android:scrollbars="vertical"
             android:singleLine="false"
             android:text=""
             android:textColor="#008000"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="15dp"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
         <ScrollView
             android:id="@+id/scrollView"
@@ -31,7 +32,7 @@
             android:layout_height="0dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_weight="2" >
+            android:layout_weight="2">
 
             <TextView
                 android:id="@+id/console"
@@ -42,15 +43,27 @@
                 android:singleLine="false"
                 android:text="@string/tempstring"
                 android:textColor="#008000"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
         </ScrollView>
+
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            ads:adSize="SMART_BANNER"
+            android:layout_weight="1"
+            ads:adUnitId="ca-app-pub-8527554614606787/3881904224">
+        </com.google.android.gms.ads.AdView>
 
         <com.find.coolhosts.LoadingButton
             android:id="@+id/onekey"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="30dp" />
+            android:layout_marginBottom="5dp"/>
     </LinearLayout>
 
     <LinearLayout

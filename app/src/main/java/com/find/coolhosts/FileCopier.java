@@ -3,15 +3,17 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.Closeable;
 import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-
+import com.stericson.RootTools.RootTools;
 
 public class FileCopier extends AsyncTask<Object, Void, Boolean>
 {
@@ -23,7 +25,8 @@ public class FileCopier extends AsyncTask<Object, Void, Boolean>
 		this.callback = callback;
 		isCopy=false;
 	}
-
+    /**inputs0: 拷贝的源地址
+     * inputs1: 要拷贝到的地址*/
 	@Override
 	protected Boolean doInBackground (Object... inputs)
 	{
@@ -36,20 +39,20 @@ public class FileCopier extends AsyncTask<Object, Void, Boolean>
 
 			final Runtime runtime = Runtime.getRuntime();
 			process = runtime.exec("su");
-
-			DataOutputStream os = new DataOutputStream(process.getOutputStream());
-			os.writeBytes("mount -o rw,remount -t " + mountLocation[1] + " " + mountLocation[0] + " /system\n");
-			if(inputs[0]!=null){
-				isCopy=true;
-				bufferedReader = new BufferedReader(getReader(inputs[0]));
-				String line = null;
-				while((line = bufferedReader.readLine()) != null)
-					os.writeBytes("echo '" + line + "' >> " + inputs[1] + "\n");
+            //写入目的文件
+            DataOutputStream os = new DataOutputStream(process.getOutputStream());
+            os.writeBytes("mount -o rw,remount -t " + mountLocation[1] + " " + mountLocation[0] + " /system\n");
+            os.writeBytes("chmod 666 /system/etc/hosts\n");
+            os.flush();
+            if(inputs[0]!=null){
+                isCopy=true;
+                RootTools.copyFile(inputs[0].toString(), inputs[1].toString(), false, true);
 			}else{
-				//empty hosts
-				os.writeBytes("echo '127.0.0.1 localhost' > " + inputs[1] + "\n");
+                //empty hosts
+                os.writeBytes("echo '127.0.0.1 localhost' > '" + inputs[1] + "'\n");
 			}
 			os.writeBytes("chmod 666 /system/etc/hosts\n");
+//            os.writeBytes("mount -o ro,remount -t " + mountLocation[1] + " " + mountLocation[0] + " /system\n");
 			os.writeBytes("exit\n");
 			os.flush();
 			os.close();

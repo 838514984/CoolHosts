@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "24"
-
+    compileSdkVersion 25
+    buildToolsVersion '25.0.0'
+    useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "com.find.coolhosts"
-        minSdkVersion 16
+        minSdkVersion 14
         targetSdkVersion 22
-        versionCode 16
-        versionName "2.1.6"
+        versionCode 17
+        versionName "2.2.0"
     }
     buildTypes {
         release {
@@ -22,6 +22,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:22.2.1'
-    compile files('/home/find/Dropbox/github/CoolHosts/lib/RootTools.jar')
+    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile files('/home/find/mega/github/CoolHosts/lib/RootTools.jar')
+    compile 'com.google.android.gms:play-services-ads:11.0.0'
 }

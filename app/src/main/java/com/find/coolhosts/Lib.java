@@ -10,16 +10,16 @@ import java.io.IOException;
 
 public final class Lib {
 	/**Hosts源地址*/
-	public static String SOURCE="http://googlehosts-hostsfiles.stor.sinaapp.com/hosts";
+	public static String SOURCE="https://coding.net/u/onekeyhosts/p/text/git/raw/master/hosts";
     /**服务器Hosts源更新的时间戳，检查时间请用这个接口，而不是每次都要下载整个hosts文件*/
-	public static final String HOSTS_VERSION_URL="http://googlehosts-hostsfiles.stor.sinaapp.com/updateTime";
+	public static final String HOSTS_VERSION_URL="https://coding.net/u/onekeyhosts/p/text/git/raw/master/timemark";
     /**Hosts源地址*/
     /**服务器Hosts源更新的时间戳，检查时间请用这个接口，而不是每次都要下载整个hosts文件*/
 	static final String REMOTEVERSION="";
 	private static final String TAG=Lib.class.getSimpleName();
 	static final String NOT_EXIST="Not Exist.";
 	static final String READ_ERROR="Read Error.";
-	static final String TIMEMARK_HEAD="#+UPDATE_TIME";
+	static final String TIMEMARK_HEAD="Last updated: ";
 	static final String LOG_NAME="CoolHosts";
 	public static final String HOSTSPATH="/system/etc/hosts";
 	public static String REMOTE_VERSION="";
@@ -31,7 +31,7 @@ public final class Lib {
 	public static String COOLHOSTS_UPDATE_LINK="";
 	public static String UPDATE_INFO="";
 	/**获取关于coolhosts版本的信息*/
-	public static final String COOLHOSTS_VERSION_INFO="http://hosts.findspace.name/coolhosts";
+	public static final String COOLHOSTS_VERSION_INFO="https://coolhosts.onekeyhosts.com/coolhosts";
 	//存在本地文件名
 	public static final String HOSTSINCACHE="hosts";
 	public static String SHOWADPAGE;

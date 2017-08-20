@@ -1,5 +1,7 @@
 package com.find.coolhosts;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.stericson.RootTools.RootTools;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -20,7 +22,7 @@ import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.google.android.gms.ads.MobileAds;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -36,7 +38,7 @@ public class CoolHosts extends Activity {
 	private boolean netState=false;
 	public CheckCoolHostsVersion getVersion;
 	private ButtonListener btnListener;
-	
+    private AdView mAdView;
 	/**
 	 * GetHostsVersion: 获取服务器上的hosts版本
      * GetCHVersion: 获取服务器上coolhosts的最新版本号*/
@@ -66,6 +68,10 @@ public class CoolHosts extends Activity {
         taskQueue.add(TASK.GETHOSTSVERSION);
         taskQueue.add(TASK.GETCHVERSION);
         doNextTask();
+        MobileAds.initialize(this, "ca-app-pub-8527554614606787~8008017340");
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 	public void setButtons(){
 		btnListener=new ButtonListener();
@@ -261,7 +267,7 @@ public class CoolHosts extends Activity {
 			case R.id.ad:
                 Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.putExtra(Intent.EXTRA_TEXT, "我正在使用CoolHosts一键修改我的hosts，你也试试吧 http://www.findspace.name/easycoding/503 ");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "我正在使用CoolHosts一键修改我的hosts，你也试试吧 http://coolhosts.onekeyhosts.com ");
                 shareIntent.setType("text/plain");
 
                 //设置分享列表的标题，并且每次都显示分享列表
@@ -276,7 +282,7 @@ public class CoolHosts extends Activity {
 					    	 public void onClick(DialogInterface dialog, int which) {
 					    		 Lib.SOURCE=et.getText().toString();
 					    		 CoolHosts.this.appendOnConsole(getConsole(), true, R.string.customhostsaddressnote);
-					    		 Toast.makeText(CoolHosts.this, "Host源已经切换，仅此次有效，重启应用后恢复为默认的findspace的源", Toast.LENGTH_SHORT).show();
+					    		 Toast.makeText(CoolHosts.this, "Host源已经切换，仅此次有效，重启应用后恢复为默认onekeyhosts的源", Toast.LENGTH_SHORT).show();
 					    	 }})
 					     .setNegativeButton("取消", null).show();
 				break;
@@ -301,7 +307,7 @@ public class CoolHosts extends Activity {
 			case R.id.help:
                 Log.d(TAG, "点击help");
 				Intent intent2=new Intent(CoolHosts.this,AdPage.class);
-                intent2.putExtra("url","http://www.findspace.name/easycoding/503");
+                intent2.putExtra("url","http://www.onekeyhosts.com/jiaocheng-coolhosts");
                 CoolHosts.this.startActivity(intent2);
 				break;
 			case R.id.catHosts:
